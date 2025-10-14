@@ -6,7 +6,7 @@ defineProps<{ id: string, name: string, description: string, studycredit: number
 
 
 <template>
-  <div class="card text-center shadow-md rounded-lg p-3 h-100 d-flex flex-column">
+  <div class="card text-center shadow-md rounded-lg p-3 h-100 d-flex flex-column mb-2">
     <img src="/images/plaatjevanaap.jpg" class="card-img-top rounded-md mb-3"
       style="height: 160px; object-fit: cover;"
     />
@@ -29,8 +29,7 @@ defineProps<{ id: string, name: string, description: string, studycredit: number
       display: -webkit-box;
       -webkit-line-clamp: 3; 
       -webkit-box-orient: vertical;
-      overflow: hidden;
-    ">
+      overflow: hidden;">
       {{ description }}
     </p>
   </div>
