@@ -12,16 +12,32 @@
             <li class="nav-item">
               <RouterLink to="/modules" class="nav-link text-white" active-class="active">Zoeken</RouterLink>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" v-if="!isLoggedIn">
               <RouterLink to="/login" class="nav-link text-white" active-class="active">Inloggen</RouterLink>
+            </li>
+            <li class="nav-item" v-else>
+              <RouterLink to="#" class="nav-link text-white" @click.prevent="logout">Uitloggen</RouterLink>
             </li>
           </ul>
         </div>
   </nav>
 </template>
 
-<script lang="ts">
-  import { RouterLink} from 'vue-router'
+<script setup lang="ts">
+  import { RouterLink, useRouter } from 'vue-router'
+  import { computed } from 'vue'
+
+  const router = useRouter()
+
+  const isLoggedIn = computed(() => {
+    return !!localStorage.getItem('token')
+  })
+
+  // Logout functie
+  function logout() {
+    localStorage.removeItem('token')
+    router.push('/login')
+  }
 </script>
 
 <style>

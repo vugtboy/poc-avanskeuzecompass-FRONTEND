@@ -5,6 +5,7 @@
   const router = useRouter()
 
   const email = ref<string>('')
+  const username = ref<string>('')
   const password = ref<string>('')
   const message = ref<string>('')
   const isLoading = ref<boolean>(false)
@@ -14,33 +15,32 @@
     message.value = ''
 
     try {
-      const res = await fetch('http://localhost:3000/api/user/login', {
+      const res = await fetch('http://localhost:3000/api/user/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           email: email.value,
+          username: username.value,
           password: password.value
         })
       })
 
       if (!res.ok) {
         const errorData: {message?: string} = await res.json()
-        throw new Error(errorData.message || 'Fout bij inloggen')
+        throw new Error(errorData.message || 'Fout bij aanmaken van een nieuw account')
       }
 
       const data: { token: string }  = await res.json()
-      console.log('Inlog succesvol:', data.token)
+      console.log('Register succesvol:', data.token)
       localStorage.setItem('token', data.token)
       console.log(localStorage.token)
-      message.value = 'Inloggen gelukt!'
-      router.push('/')
-
-      
+      message.value = 'Registreren gelukt!'
+      router.push('/login')      
     } catch (err: any) {
       console.error(err)
-      message.value = 'Inloggen mislukt: ' + err.message
+      message.value = 'Registreren mislukt: ' + err.message
     } finally {
       isLoading.value = false
     }
@@ -60,16 +60,21 @@
         </div>
 
         <div class="mb-3">
+          <label for="username" class="form-label">Gebruikersnaam</label>
+          <input v-model="username" type="text" id="username" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
           <label for="password" class="form-label">Wachtwoord</label>
           <input v-model="password" type="password" id="password" class="form-control" required />
         </div>
 
         <div class="d-grid mb-3">
           <button type="submit" class="btn btn-primary" :disabled="isLoading">
-            {{ isLoading ? 'Bezig...' : 'Inloggen' }}
+            {{ isLoading ? 'Bezig...' : 'Registreren' }}
           </button>
         </div>
-        <p>Heeft u nog geen account, <router-link to="/register">maak er dan één.</router-link></p>
+        <p>Heeft u al geen account, <router-link to="/login">log dan in.</router-link></p>
 
         <p class="text-danger text-center mb-0">{{ message }}</p>
       </form>

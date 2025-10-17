@@ -3,7 +3,9 @@ import VKMComponent from '../search/VKMComponent.vue'
 import { ref, onMounted } from 'vue'
 import { PaginatedVKM } from '../../domain/models/paginatedvkm.model'
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const modules = ref<PaginatedVKM | null>(null)
 const message = ref<string>('Laden...')
 const hasError = ref<boolean>(false)
@@ -11,11 +13,53 @@ const page = ref<number>(1)
 const limit = ref<number>(10)
 const totalPages = ref<number>(1)
 const search = ref<string>("")
+const favoriteIds = ref<string[]>([])
+
+async function fetchFavorites() {
+  const token = localStorage.getItem('token')
+  if (!token) {
+    return
+  }
+  try {
+    const res = await fetch('http://localhost:3000/api/user/favorite/get', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+
+    if (res.status === 403) {
+      localStorage.removeItem('token')
+      router.push('/login')
+      return
+    }
+
+    if (!res.ok) throw new Error('Favorieten ophalen mislukt')
+    
+    const data = await res.json()
+    favoriteIds.value = data
+    console.log(favoriteIds.value)
+  } catch (err) {
+    console.error('Fout bij ophalen van favorieten:', err)
+  }
+}
+
 
 async function fetchModules(p: number = 1) {
   page.value = p
   try {
-    const res = await fetch(`http://localhost:3000/api/vkm?search=${encodeURIComponent(search.value)}&page=${p}&limit=${limit.value}`)
+    const token = localStorage.getItem('token');
+    const res = await fetch(`http://localhost:3000/api/vkm?search=${encodeURIComponent(search.value)}&page=${p}&limit=${limit.value}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      }
+    });
+
+    if (res.status === 403) {
+      localStorage.removeItem('token') 
+      router.push('/login')              
+      return
+    }
     if (!res.ok) throw new Error(`HTTP error! ${res.status}`)
 
     const data: PaginatedVKM = await res.json()
@@ -35,14 +79,19 @@ async function fetchModules(p: number = 1) {
     hasError.value = true
   }
 }
-onMounted(() => fetchModules(page.value))
+onMounted( async () => {
+  await fetchFavorites()
+  fetchModules(page.value)
+})
 
-function goToPage(p: number) {
+async function goToPage(p: number) {
   if (p < 1 || p > totalPages.value) return
+  await fetchFavorites()
   fetchModules(p)
 }
 
-function searchModules() {
+async function searchModules() {
+  await fetchFavorites()
   fetchModules(1)
 }
 
@@ -87,6 +136,7 @@ const visiblePages = computed(() => {
           :description="m.description"
           :level="m.level"
           :studycredit="m.studycredit"
+          :initialFavorite="favoriteIds.includes(m.id)"
         />
       </div>
 
