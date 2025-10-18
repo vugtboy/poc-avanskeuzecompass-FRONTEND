@@ -1,52 +1,7 @@
 <script setup lang="ts">
+import FavoriteButton from '../search/FavoriteButton.vue'
+defineProps<{ id: string, name: string, description: string, studycredit: number, level: string, initialFavorite: boolean}>()
 
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
-
-const props = defineProps<{ id: string, name: string, description: string, studycredit: number, level: string, initialFavorite: boolean}>()
-
-const success = ref(false)
-const error = ref(false)
-const isFavorite = ref(props.initialFavorite)
-
-
-async function toggleFavorite() {
-  const token = localStorage.getItem('token')
-
-  if (!token) {
-    return
-  }
-
-  try {
-    const url = isFavorite.value
-      ? 'http://localhost:3000/api/user/favorite/remove'
-      : 'http://localhost:3000/api/user/favorite/add'
-
-    const res = await fetch(url, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify({ VKMId: props.id }),
-    })
-    if (res.status === 403) {
-          localStorage.removeItem('token') 
-          router.push('/login')              
-          return
-    }
-    if (!res.ok) throw new Error(`Server error: ${res.status}`)
-    isFavorite.value = !isFavorite.value
-    success.value = true
-    error.value = false
-  } catch (err) {
-    console.error(err)
-    success.value = false
-    error.value = true
-  }
-}
 </script>
 
 
@@ -67,14 +22,7 @@ async function toggleFavorite() {
 
     <div class="d-flex align-items-center justify-content-between mb-2">
       <h5 class="fw-bold mb-0 text-truncate" style="flex-grow: 1;">{{ name }}</h5>
-      <button
-        @click="toggleFavorite"
-        class="btn p-0 ms-2"
-        :title="isFavorite ? 'Verwijderd uit favorieten' : 'Voeg toe aan favorieten'"
-        style="font-size: 1.5rem; border: none; background: transparent; color: inherit;"
-      >
-        <i :class="isFavorite ? 'bi-heart-fill text-danger' : 'bi-heart text-dark'"></i>
-      </button>
+      <FavoriteButton :id="id" :initialFavorite="initialFavorite"></FavoriteButton>
     </div>
  
     <!-- Beschrijving met ellipsis -->
