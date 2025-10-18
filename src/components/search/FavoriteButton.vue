@@ -9,7 +9,7 @@ const props = defineProps<{id: string, initialFavorite: boolean}>()
 const success = ref(false)
 const error = ref(false)
 const isFavorite = ref(props.initialFavorite)
-const URL = import.meta.env.URL || 'http://localhost:3000/api'
+const URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
 
 async function toggleFavorite() {
   const token = localStorage.getItem('token')

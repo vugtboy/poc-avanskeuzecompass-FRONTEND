@@ -9,7 +9,7 @@
   const password = ref<string>('')
   const message = ref<string>('')
   const isLoading = ref<boolean>(false)
-const URL = import.meta.env.URL || 'http://localhost:3000/api'
+const URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
   
   async function login() {
     isLoading.value = true

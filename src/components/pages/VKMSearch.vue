@@ -14,7 +14,7 @@ const limit = ref<number>(10)
 const totalPages = ref<number>(1)
 const search = ref<string>("")
 const favoriteIds = ref<string[]>([])
-const URL = import.meta.env.URL || 'http://localhost:3000/api'
+const URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/banaan'
 
 async function fetchFavorites() {
   const token = localStorage.getItem('token')
