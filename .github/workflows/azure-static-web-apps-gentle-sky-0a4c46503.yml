@@ -48,14 +48,13 @@ jobs:
 
       # 🚀 Deploy handmatig gebouwde app naar Azure
       - name: Deploy to Azure Static Web Apps
-        id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_GENTLE_SKY_0A4C46503 }}
           action: "upload"
-          app_location: "/"               # root map
-          output_location: "dist"         # output van build
-          github_id_token: ${{ steps.idtoken.outputs.result }}
+          app_location: "/"              # jouw project root
+          output_location: "dist"        # de folder die `npm run build` oplevert
+          skip_app_build: true           # ⛔️ STOP Oryx
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
