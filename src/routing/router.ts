@@ -20,7 +20,7 @@ const router = createRouter({
     routes,
 })
 
-router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+router.beforeEach((to: RouteLocationNormalized, _from: RouteLocationNormalized, next: NavigationGuardNext) => {
   const token = localStorage.getItem('token')
 
   if (to.meta.requiresAuth && !token) {
