@@ -9,13 +9,14 @@
   const password = ref<string>('')
   const message = ref<string>('')
   const isLoading = ref<boolean>(false)
-
+const URL = import.meta.env.URL || 'http://localhost:3000/api'
+  
   async function login() {
     isLoading.value = true
     message.value = ''
 
     try {
-      const res = await fetch('http://localhost:3000/api/user/register', {
+      const res = await fetch(URL + '/user/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

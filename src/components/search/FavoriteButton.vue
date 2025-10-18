@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -10,7 +9,7 @@ const props = defineProps<{id: string, initialFavorite: boolean}>()
 const success = ref(false)
 const error = ref(false)
 const isFavorite = ref(props.initialFavorite)
-
+const URL = import.meta.env.URL || 'http://localhost:3000/api'
 
 async function toggleFavorite() {
   const token = localStorage.getItem('token')
@@ -21,8 +20,8 @@ async function toggleFavorite() {
 
   try {
     const url = isFavorite.value
-      ? 'http://localhost:3000/api/user/favorite/remove'
-      : 'http://localhost:3000/api/user/favorite/add'
+      ? URL + '/user/favorite/remove'
+      : URL + '/user/favorite/add'
 
     const res = await fetch(url, {
       method: 'PATCH',

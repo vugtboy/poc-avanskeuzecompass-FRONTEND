@@ -14,6 +14,7 @@ const limit = ref<number>(10)
 const totalPages = ref<number>(1)
 const search = ref<string>("")
 const favoriteIds = ref<string[]>([])
+const URL = import.meta.env.URL || 'http://localhost:3000/api'
 
 async function fetchFavorites() {
   const token = localStorage.getItem('token')
@@ -21,7 +22,7 @@ async function fetchFavorites() {
     return
   }
   try {
-    const res = await fetch('http://localhost:3000/api/user/favorite/get', {
+    const res = await fetch(URL + '/user/favorite/get', {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -48,7 +49,7 @@ async function fetchModules(p: number = 1) {
   page.value = p
   try {
     const token = localStorage.getItem('token');
-    const res = await fetch(`http://localhost:3000/api/vkm?search=${encodeURIComponent(search.value)}&page=${p}&limit=${limit.value}`, {
+    const res = await fetch(URL + `/vkm?search=${encodeURIComponent(search.value)}&page=${p}&limit=${limit.value}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
