@@ -5,6 +5,8 @@ import Bananen from '../components/pages/VKMSearch.vue'
 import Login from '../components/pages/Login.vue'
 import Register from '../components/pages/Register.vue'
 import NotFound from '../components/pages/NotFound.vue'
+import type { RouteLocationNormalized, NavigationGuardNext } from 'vue-router';
+
 const routes = [
     { path: '/', component: Overview, meta: { hideLayout: false } },
     { path: '/modules', component: Bananen, meta: { hideLayout: false, requiresAuth: true } },
@@ -18,7 +20,7 @@ const router = createRouter({
     routes,
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
   const token = localStorage.getItem('token')
 
   if (to.meta.requiresAuth && !token) {
