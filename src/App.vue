@@ -7,9 +7,10 @@
     <main class="flex-grow-1 " :class="{ 'mt-navbar container py-5': !hideLayout }">
       <RouterView />
     </main>
-
-    <Footer v-if="!hideLayout"></Footer>
+    
     <!-- Footer -->
+    <Footer v-if="!hideLayout"></Footer>
+    
     
   </div>
 </template>

@@ -17,13 +17,14 @@ const favoriteIds = ref<string[]>([])
 const URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/banaan'
 
 async function fetchFavorites() {
-  const token = localStorage.getItem('token')
+  const token : string | null = localStorage.getItem('token')
   if (!token) {
     return
   }
   try {
     const res = await fetch(URL + '/user/favorite/get', {
       headers: {
+        'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
       }
     })

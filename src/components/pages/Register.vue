@@ -75,7 +75,7 @@ const URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
             {{ isLoading ? 'Bezig...' : 'Registreren' }}
           </button>
         </div>
-        <p>Heeft u al geen account, <router-link to="/login">log dan in.</router-link></p>
+        <p>Heeft u al een account, <router-link to="/login">log dan in.</router-link></p>
 
         <p class="text-danger text-center mb-0">{{ message }}</p>
       </form>
