@@ -16,6 +16,7 @@ const search = ref<string>("")
 const favoriteIds = ref<string[]>([])
 const URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/banaan'
 
+//favorieten ophalen die bij de user horen uit de backend
 async function fetchFavorites() {
   const token : string | null = localStorage.getItem('token')
   if (!token) {
@@ -45,7 +46,7 @@ async function fetchFavorites() {
   }
 }
 
-
+//keuzemodules ophalen uit de backend die horen bij de zoekterm van de gebruiker en de geselcteerde page
 async function fetchModules(p: number = 1) {
   page.value = p
   try {
@@ -81,17 +82,20 @@ async function fetchModules(p: number = 1) {
     hasError.value = true
   }
 }
+//favorieten eerst ophalen dan modules ophalen en tonen
 onMounted( async () => {
   await fetchFavorites()
   fetchModules(page.value)
 })
 
+//van page wisselen
 async function goToPage(p: number) {
   if (p < 1 || p > totalPages.value) return
   await fetchFavorites()
   fetchModules(p)
 }
 
+//modules zoeken
 async function searchModules() {
   await fetchFavorites()
   fetchModules(1)

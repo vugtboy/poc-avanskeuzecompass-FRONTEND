@@ -10,7 +10,8 @@
   const message = ref<string>('')
   const isLoading = ref<boolean>(false)
 const URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
-  
+
+  //volgens de backend proberen een account aan te maken met ingevoerde gegevens. Goed -> door naar inloggen zo niet dan een fout weergeven
   async function login() {
     isLoading.value = true
     message.value = ''
